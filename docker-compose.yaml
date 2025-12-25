@@ -1,0 +1,12 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      # Example; keep config in env vars (or use an env_file)
+      # APP_ENV: "production"
+      PYTHONUNBUFFERED: "1"
+    restart: unless-stopped

@@ -1,0 +1,99 @@
+[build-system]
+requires = ["setuptools>=80"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "fastapi-template"
+version = "0.1.0"
+description = "Reusable FastAPI template project"
+requires-python = ">=3.12"
+license = { text = "MIT" }
+
+dependencies = [
+  "fastapi>=0.127.0,<1.0.0",
+  "pydantic>=2.12.5,<3.0.0",
+  "httpx>=0.28.1,<1.0.0",
+  "uvicorn[standard]>=0.40.0,<1.0.0",
+  "sqlalchemy>=2.0.45,<3.0.0",
+]
+
+[project.urls]
+Homepage = "https://example.com"
+Repository = "https://example.com/repo"
+
+[dependency-groups]
+dev = [
+  "black>=25.12.0",
+  "ruff>=0.14.10",
+  "pytest>=8.0.0",
+  "pytest-asyncio>=0.23.0",
+  "pytest-cov>=5.0.0",
+]
+
+[tool.uv]
+package = true
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["app*"]
+exclude = ["tests*"]
+
+[tool.pytest.ini_options]
+minversion = "8.0"
+testpaths = ["tests"]
+addopts = "-ra"
+asyncio_mode = "auto"
+
+# --- Formatting (Black) ---
+[tool.black]
+line-length = 88
+target-version = ["py312", "py313"]
+extend-exclude = '''
+/(
+  \.venv
+  | build
+  | dist
+  | \.mypy_cache
+  | \.ruff_cache
+)/
+'''
+
+# --- Linting (Ruff) ---
+[tool.ruff]
+line-length = 88
+extend-exclude = [
+  ".venv",
+  "build",
+  "dist",
+  ".mypy_cache",
+  ".ruff_cache",
+]
+
+[tool.ruff.lint]
+# Keep this relatively strict but practical for FastAPI projects.
+select = [
+  "E",    # pycodestyle errors
+  "F",    # pyflakes
+  "W",    # pycodestyle warnings
+  "I",    # isort
+  "B",    # flake8-bugbear
+  "UP",   # pyupgrade
+  "SIM",  # simplify
+  "C4",   # comprehensions
+  "RUF",  # ruff-specific rules
+]
+ignore = [
+  "E501", # line length handled by Black
+  "B008", # FastAPI pattern: Depends(...) in default args
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["app"]
+combine-as-imports = true
+
+[tool.ruff.lint.per-file-ignores]
+# Tests often use asserts, fixtures, and intentionally unused vars.
+"tests/**/*.py" = ["F841", "B018"]

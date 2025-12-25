@@ -1,0 +1,10 @@
+fastapi
+httpx
+pydantic
+pydantic-settings
+python-dotenv
+uvicorn
+sqlalchemy
+ruff
+black
+setuptools
